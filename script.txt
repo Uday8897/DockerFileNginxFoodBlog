@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+    tools {
+        maven 'Maven'
+    }
+    stages {
+        stage('git repo & clean') {
+            steps {
+                bat 'if exist Temp rmdir /s /q Temp' // Corrected 'exists' to 'exist'
+                bat 'git clone https://github.com/Uday8897/Temp.git'
+                bat 'mvn clean -f Temp/pom.xml'
+            }
+        }
+        stage('install') {
+            steps {
+                bat 'mvn install -f Temp/pom.xml'
+            }
+        }
+        stage('test') {
+            steps {
+                bat 'mvn test -f Temp/pom.xml' // Corrected 'pm.xml' to 'pom.xml'
+            }
+        }
+        stage('package') {
+            steps {
+                bat 'mvn package -f Temp/pom.xml'
+            }
+        }
+    }
+}
